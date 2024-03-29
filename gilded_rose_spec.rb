@@ -1,7 +1,10 @@
 require 'rspec'
 
-require File.join(File.dirname(__FILE__), 'gilded_rose')
-require File.join(File.dirname(__FILE__), 'item')
+require './gilded_rose.rb'
+require './item.rb'
+require './aged_brie.rb'
+require './back_stage_pass.rb'
+require './sulfuras.rb'
 
 describe GildedRose do
   subject { GildedRose.new([item]) }
@@ -25,10 +28,18 @@ describe GildedRose do
       it "decrements quality" do
         expect(item.quality).to eq 19
       end
+
+      context 'sell_in is decremented below 0' do
+        let(:item) { Item.new("Basic Item", 0, 20) }
+
+        it "quality is decremented by two" do
+          expect(item.quality).to eq 18
+        end
+      end
     end
 
     context 'item is Aged Brie' do
-      let(:item) { Item.new("Aged Brie", 10, 20) }
+      let(:item) { AgedBrie.new("Aged Brie", 10, 20) }
 
       it "does not change the name" do
         expect(item.name).to eq "Aged Brie"
@@ -43,16 +54,16 @@ describe GildedRose do
       end
 
       context 'quality is at 50' do
-        let(:item) { Item.new("Aged Brie", 10, 50) }
+        let(:item) { AgedBrie.new("Aged Brie", 10, 50) }
 
-        it " does not increments quality" do
+        it "does not increments quality" do
           expect(item.quality).to eq 50
         end
       end
     end
 
     context 'item is Sulfuras, Hand of Ragnaros' do
-      let(:item) { Item.new("Sulfuras, Hand of Ragnaros", 0, 80) }
+      let(:item) { Sulfuras.new("Sulfuras, Hand of Ragnaros", 0, 80) }
 
       it "does not change the name" do
         expect(item.name).to eq "Sulfuras, Hand of Ragnaros"
@@ -68,7 +79,7 @@ describe GildedRose do
     end
 
     context 'item is Backstage passes to a TAFKAL80ETC concert' do
-      let(:item) { Item.new("Backstage passes to a TAFKAL80ETC concert", 15, 30) }
+      let(:item) { BackStagePass.new("Backstage passes to a TAFKAL80ETC concert", 15, 30) }
 
       it "does not change the name" do
         expect(item.name).to eq "Backstage passes to a TAFKAL80ETC concert"
@@ -83,7 +94,7 @@ describe GildedRose do
       end
 
       context 'quality is at 50' do
-        let(:item) { Item.new("Backstage passes to a TAFKAL80ETC concert", 10, 50) }
+        let(:item) { BackStagePass.new("Backstage passes to a TAFKAL80ETC concert", 10, 50) }
 
         it "does not increment quality" do
           expect(item.quality).to eq 50
@@ -91,7 +102,7 @@ describe GildedRose do
       end
 
       context "when sell_in is less than or equal to 10" do
-        let(:item) { Item.new("Backstage passes to a TAFKAL80ETC concert", 10, 30) }
+        let(:item) { BackStagePass.new("Backstage passes to a TAFKAL80ETC concert", 10, 30) }
 
         it "decrements sell_in by 1" do
           expect(item.sell_in).to eq 9
@@ -103,7 +114,7 @@ describe GildedRose do
       end
 
       context "when sell_in is less than or equal to 5" do
-        let(:item) { Item.new("Backstage passes to a TAFKAL80ETC concert", 5, 30) }
+        let(:item) { BackStagePass.new("Backstage passes to a TAFKAL80ETC concert", 5, 30) }
 
         it "decrements sell_in by 1" do
           expect(item.sell_in).to eq 4
@@ -115,7 +126,7 @@ describe GildedRose do
       end
 
       context "when sell_in is decremented to less than 0" do
-        let(:item) { Item.new("Backstage passes to a TAFKAL80ETC concert", 0, 30) }
+        let(:item) { BackStagePass.new("Backstage passes to a TAFKAL80ETC concert", 0, 30) }
 
         it "decrements sell_in by 1" do
           expect(item.sell_in).to eq -1
